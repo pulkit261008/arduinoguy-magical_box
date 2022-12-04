@@ -1,0 +1,374 @@
+<html>
+<title>The Arduino Guy-Magical Box</title>
+<h1><font size="25" color = "Green">Magical Box</font></h1>
+<body>
+<p>Hello Guys. Today we will be making a project that will gurantee you full marks in your maths project.</p><br>
+<font size="10" color = "Green"><u><b>Materials Required:</u></b></font><font size = "5" color = "blue"><ol>
+<li>Arduino</li>
+<li>Servo Motor(SG90 or MG90)</li>
+<li>Bluetooth Module(HC-05)</li>
+<li>16 by 2 I2C Lcd Display</li>
+<li>RGB(Red Green Blue Led){Optional}</li>
+</ol></font>
+First of all we need Arduino in most of our projects. So let us try to understand What is arduino.</p>
+<h2><font size = "10" color="blue">Arduino</font></h2>
+<font size="5"><p>Arduino is a open source hardware microcontroller board that can be programmed to control various devices such as motors, led's,displays etc.
+It has 14 digital pins out of which 2 can be used to setup the Serial communication for communicating devices such as Bluetooth.
+It has 6 Analog pins which is widely used connect sensors like soil moisture sensor, Water level sensor etc. In th power pins 
+there is one 5v pin and the other 3.3v pin. Two ground pins are available in the power pins but in total arduino has 3 ground pins
+out of which 3rd pin is located near digital pin 13. The Arduino has to be programmed using a software developed by the Arduino Community
+known as Arduino IDE. This software is based on C++ programming language.There are different types of arduino like:</p><font><br>
+<table border="3">
+
+<tr><th><font size="5">Type of Arduino</th><th><font size="5">Microcontroller used</th><th><font size="5">Digital pins</th><th><font size="5">Analog Pins</th>
+<tr><td><font size="5">Arduino Uno</td><td><font size="5">ATmega328P</td><td><font size="5">14 digital input/output pins</td><td><font size="5">6 analog pins</td>
+<tr><td><font size="5">Arduino Nano</td><td><font size="5">ATmega328</td><td><font size="5">14 digital input/output pins</td><td><font size="5">8 analog pins</td>
+<tr><td><font size="5">Arduino Mega 2560</td><td><font size="5">ATmega2560</td><td><font size="5">54 digital input/output pins</td><td><font size="5">16 analog pins</td></table></font><br>
+<h2><font size = "10" color="blue">Servo Motor</font></h2>
+
+<font size="5"><p>Servo motor is a type of motor in which you can control the position of your motor.Using PWM signal(Pulse Width Modulation)
+you can control the position. To create that type of signal we need arduino(There are many other controllers you can control with but simply you
+can't connect a battery). For example using pwm signal, we can set the angle of the arm by 180 degree, 90 degree etc. Using this we will create
+a program in which you can type the angle and the arm will set to that angle</p></font>
+<br>
+<h2><font size = "10" color="blue">Bluetooth Module(HC-05)</font></h2>
+<font size="5"><p>A bluetooth module is a type of module in which it enables you to connect with other bluetooth master devices lke your phone. You can also
+pair a bluetooth module with another bluetooth module by making one of them as a master device. You can connect it with arduino and then you can 
+enable it using serial communication. In our project we will enable Serial communication and then we will write a program to recieve inputs from 
+your phone and then based on the inputs the arduino will perform specific output. This may look compicated but for those who have know basic things about 
+Arduino like printing on serial monitor, it will be really easy for them.</p></font><br>
+
+<h2><font size = "10" color="blue">LCD Display(Liquid Crystal Display)</font></h2>
+<font size="5"><p>A LCD display is a type of display in which you can print letters,words and even your own custom characters. This plays an important role in those
+projects where you need to display the outputs from some of the sensors. We can use it with arduino and program it in our project so that it can display algebraic
+identites.Here we will be using I2C_Lcd display because the connection for these type of display is easier then the normal display and program is similar to the
+normal dsplay. You can buy I2C lcd module to connect with a normal lcd and there you go your I2C Lcd Display is ready. The only thing that has left out is to connect
+with an Arduino.</p></font> 
+
+<h2><font size = "10" color="blue">Circuit Connections</font></h2>
+<font size="5"><p>(Before starting, I would recomend you buying an "Prototype Expansion board with breadboard" cause ths will make your connections easier otherwise
+you had to buy a breadboard but this will make your connection complex.)In Servo motor there will be three wires:- Yellow, Red and Brown. You can connect the yellow wire
+to digital pin no.3, red to 5V, Brown to GND(Ground or negative). In bluetooth module there are 6 pins but we only need to connect 4 out of them. VCC pin on bluetooth module
+will go to the 5V(VCC) pin on arduino, GND pin on bluetooth will go to the GND pin on Arduin, TXD on bluetooth pin will go to the RX pin(digital pin 0) on arduino. Now for 
+LCD Dislay(I2C_Display), there are 4 pins:-GND,VCC,SDA,SCL. GND will go the GND pin on arduino, VCC will go to the 5V(VCC) pin on Arduino, SDA will go to the Analog pin 4(A4)
+on arduino, SCL will go to the analog pin 5(A5) on arduino. RGB led is optional and also it will make the circuit complex. SO we will leave that part. Thos who know some basic
+skills on arduino, They can understand the code and figure it out where I have mentioned the code for RGB led. That is all for circuit connections.</p></font>
+<h2><font size = "10" color="blue">Code</font></h2>
+<font size="5"><p>Here is the code for this project:</p></font><br>
+<p><font size="5">
+
+
+/* By Pulkit Singla
+ *  In Void Setup(), I have written your name and class. Please replace that with your name<br>
+ *  and class. Another thing is that In this program, I have also coded for RGB Led. Those who are<br>
+ *  interested to include that they can otherwise they can leave that part too otherwise it will<br>
+ *  make the connection complex. If youw will upload the code without conneting the RGB led, Then you<br>
+ *  don't need to remove that specific part of code. It will work just fine.<br>
+ *  Another important thing is that you need to include some libraries. To add, go to "sketch" on the top bar then click "Include Library" and then find the library for Servo motor(You don't
+ *  Library name will be Servo. click on thatand the servo library is added to your sketch. You have to include another library for display. But you have to download that library and wih the 
+same process as the previous one, include the library for lcd. For downloadingg the library, there is a link below the program.
+ */<br>
+Servo arm;<br>
+String val;<br>
+int x;<br>
+int b = 11;<br>
+int r = 12;<br>
+int g = 13;<br>
+LiquidCrystal_I2C lcd(0x27,16,2);<br>
+void setup() {<br>
+  pinMode(b, OUTPUT);<br>
+  pinMode(g, OUTPUT);<br>
+  pinMode(r, OUTPUT);<br>
+  arm.attach(3);<br>
+  Serial.begin(9600);<br>
+  lcd.init();<br>
+  lcd.backlight();<br>
+  arm.write(0);<br>
+  lcd.setCursor(0,0);<br>
+  lcd.print("Maths project by");<br>
+  lcd.setCursor(0,1);<br>
+  lcd.print("Your Name and Class");<br>
+  delay(5000);<br>
+  lcd.clear();<br>
+  // put your setup code here, to run once:<br>
+
+}<br>
+
+void loop() {<br>
+  if(Serial.available() > 0){<br>
+    val = Serial.readString();<br>
+    Serial.println(val);<br>
+  }<br>
+  if(x = val.toInt()){<br>
+    Serial.println(x);<br>
+    if(x <= 180){<br>
+      arm.write(x);<br>
+      lcd.setCursor(0,0);<br>
+      lcd.print("Arm at:  ");<br>
+      lcd.setCursor(8,0);<br>
+      lcd.print(val);<br>
+      lcd.print("            ");<br>
+      lcd.setCursor(0,1);<br>
+      lcd.print("                  ");<br>
+    }<br>
+    else if(x > 180 and x <= 360){<br>
+      digitalWrite(r, HIGH);<br>
+      digitalWrite(b, LOW);<br>
+      digitalWrite(g, LOW);<br>
+      lcd.setCursor(0,0);<br>
+      lcd.print("Arm cannot reach");<br>
+      lcd.setCursor(0,1);<br>
+      lcd.print("but....");<br>
+      lcd.print("          ");<br>
+      delay(2500);<br>
+      lcd.clear();<br>
+      lcd.setCursor(0,0);<br>
+      lcd.print("It's an");<br>
+      lcd.setCursor(0,1);<br>
+      lcd.print("Reflex Angle");<br>
+      delay(2500);<br>
+      lcd.clear();<br>
+      lcd.setCursor(0,0);<br>
+      lcd.print("If a angle is");<br>
+      lcd.setCursor(0,1);<br>
+      lcd.print("Greater than 180");<br>
+      delay(3500);<br>
+      lcd.clear();<br>
+      lcd.setCursor(0,0);<br>
+      lcd.print("Then it's known");<br>
+      lcd.setCursor(0,1);
+      lcd.print("As Reflex angle");<br>
+      delay(3500);<br>
+      
+    }<br>
+    if(x > 0 and x < 90){<br>
+      digitalWrite(b, HIGH);<br>
+      digitalWrite(r, LOW);<br>
+      digitalWrite(g, LOW);<br>
+
+      lcd.setCursor(0,1);<br>
+      lcd.print("Acute Angle");<br>
+      lcd.print("                 ");<br>
+      delay(5000);<br>
+      lcd.clear();<br>
+      lcd.setCursor(0,0);<br>
+      lcd.print("If an Angle is");<br>
+      lcd.setCursor(0,1);<br>
+      lcd.print("greater than 0"); <br>
+      delay(3500);<br>
+      lcd.clear();<br>
+      lcd.setCursor(0,0);<br>
+      lcd.print("But smaller than");<br>
+      lcd.setCursor(0,1);<br>
+      lcd.print("90 ,then");<br>
+      delay(3500);<br>
+      lcd.clear();<br>
+      lcd.setCursor(0,0);
+      lcd.print("It's  known as");<br>
+      lcd.setCursor(0,1);<br>
+      lcd.print("Acute Angle");<br>
+      delay(3500);<br>
+    }
+    if(x == 90){<br>
+      digitalWrite(g, LOW);<br>
+      digitalWrite(b, HIGH);<br>
+      digitalWrite(r, HIGH);<br>
+      lcd.setCursor(0,1);<br>
+      lcd.print("Right Angle");<br>
+      lcd.print("                 ");<br>
+      delay(5000);<br>
+      lcd.clear();<br>
+      lcd.setCursor(0,0);<br>
+      lcd.print("If an Angle is");<br>
+      lcd.setCursor(0,1);<br
+      lcd.print(" = to 90 , then"); <br>
+      delay(3500);<br>
+      lcd.clear();<br>
+      lcd.setCursor(0,0);<br>
+      lcd.print("It's known as");<br>
+      lcd.setCursor(0,1);<br>
+      lcd.print("Right Angle");<br>
+      delay(3500);<br>
+    }<br>
+    if(x > 90 and x < 180){<br>
+      analogWrite(g, 255);<br>
+      analogWrite(b, 0);<br>
+      analogWrite(r, 125);<br>
+      lcd.setCursor(0,1);<br>
+      lcd.print("Obtuse Angle");<br>
+      lcd.print("                 ");<br>
+      delay(5000);<br>
+      lcd.clear();<br>
+      lcd.setCursor(0,0);<br>
+      lcd.print("If an Angle is");<br>
+      lcd.setCursor(0,1);<br>
+      lcd.print("greater than 90"); <br>
+      delay(3500);<br>
+      lcd.clear();<br>
+      lcd.setCursor(0,0);<br>
+      lcd.print("But smaller than");<br>
+      lcd.setCursor(0,1);<br>
+      lcd.print("180 ,then");<br>
+      delay(3500);<br>
+      lcd.clear();<br>
+      lcd.setCursor(0,0);<br>
+      lcd.print("It's  known as");<br>
+      lcd.setCursor(0,1);<br>
+      lcd.print("Obtuse Angle");<br>
+      delay(3500);<br>
+    }<br>
+    if(x == 180){<br>
+      digitalWrite(r, HIGH);<br>
+      digitalWrite(b, HIGH);<br>
+      digitalWrite(g, HIGH);<br>
+      lcd.setCursor(0,1);<br>
+      lcd.print("Straight Angle");<br>
+      lcd.print("                 ");<br>
+      delay(5000);<br>
+      lcd.clear();
+      lcd.setCursor(0,0);<br>
+      lcd.print("If an Angle is");<br>
+      lcd.setCursor(0,1);<br>
+      lcd.print(" = to 180, then");<br> 
+      delay(3500);<br>
+      lcd.clear();<br>
+      lcd.setCursor(0,0);<br>
+      lcd.print("It's known as");<br>
+      lcd.setCursor(0,1);<br>
+      lcd.print("Straight Angle");<br>
+      delay(3500);<br>
+    }<br>
+  <br>
+  }<br>
+  else if(val == "(a + b)²" or val == "(a+b)²" or val == "(A + B)²" or val == "(A+B)²"){<br>
+    digitalWrite(r, LOW);<br>
+    digitalWrite(g, LOW);<br>
+    digitalWrite(b, LOW);<br>
+    lcd.setCursor(0,0);<br>
+    lcd.print("= a^2+b^2+2ab");<br>
+    lcd.print("                ");<br>
+    lcd.setCursor(0,1);<br>
+    lcd.print("                    ");   <br>
+  }<br>
+  else if(val == "(a - b)²" or val == "(a-b)²" or val == "(A - B)²" or val == "(A-B)²"){<br>
+    digitalWrite(r, LOW);<br>
+    digitalWrite(g, LOW);<br>
+    digitalWrite(b, LOW);<br><br>
+    lcd.setCursor(0,0);<br>
+    lcd.print("= a^2+b^2-2ab");<br>
+    lcd.print("                ");<br>
+    lcd.setCursor(0,1);<br>
+    lcd.print("                    ");   <br>
+  }<br>
+  else if(val == "a² - b²" or val == "a²-b²" or val == "A² - B²" or val == "A²-B²"){<br>
+    digitalWrite(r, LOW);<br>
+    digitalWrite(g, LOW);<br>
+    digitalWrite(b, LOW);<br>
+    lcd.setCursor(0,0);<br>
+    lcd.print("= (a+b)(a-b)");<br>
+    lcd.print("                ");<br>
+    lcd.setCursor(0,1);<br>
+    lcd.print("                    ");   <br>
+  }<br>
+  else if(val == "(x + a)(x + b)" or val == "(x+a)(x+b)" or val == "(X + A)(X + B)" or val == "(X+A)(X+B)"){<br>
+    digitalWrite(r, LOW);<br>
+    digitalWrite(g, LOW);<br>
+    digitalWrite(b, LOW);<br>
+    lcd.setCursor(0,0);<br>
+    lcd.print("= x^2+(a+b)x+ab");<br>
+    lcd.print("                ");<br>
+    lcd.setCursor(0,1);<br>
+    lcd.print("                    ");   <br>
+  }<br>
+  else if(val == "(a + b)³" or val == "(a+b)³" or val == "(A + B)³" or val == "(A+B)³"){<br>
+    digitalWrite(r, LOW);<br>
+    digitalWrite(g, LOW);<br>
+    digitalWrite(b, LOW);<br>
+    lcd.setCursor(0,0);<br>
+    lcd.print("a^3+b^3+3ab(a+b)");<br>
+    lcd.print("                ");<br>
+    lcd.setCursor(0,1);<br>
+    lcd.print("                    ");<br>
+  }<br>
+  else if(val == "(a - b)³" or val == "(a-b)³" or val == "(A - B)³" or val == "(A-B)³"){<br>
+    digitalWrite(r, LOW);<br>
+    digitalWrite(g, LOW);<br>
+    digitalWrite(b, LOW);<br>
+    lcd.setCursor(0,0);<br>
+    lcd.print("a^3-b^3-3ab(a-b)");<br>
+    lcd.print("                ");<br>
+    lcd.setCursor(0,1);<br>
+    lcd.print("                    ");   <br>
+  }<br>
+  else if(val == "(a + b + c)²" or val == "(a+b+c)²" or val == "(A + B + C)²" or val == "(A+B+C)²"){<br>
+    digitalWrite(r, LOW);<br>
+    digitalWrite(g, LOW);<br>
+    digitalWrite(b, LOW);<br>
+    lcd.setCursor(0,0);<br>
+    lcd.print("a^2+b^2+c^2+");<br>
+    lcd.print("                ");<br>
+    lcd.setCursor(0,1);<br>
+    lcd.print("2(ab+ac+bc)");<br>
+    lcd.print("             ");   <br>
+  }<br>
+
+  else if(val == "x³ + y³ + z³ - 3xyz" or val == "x³+y³+z³-3xyz" or val == "X³ + Y³ + Z³ - 3XYZ" or val == "X³+Y³+Z³-3XYZ"){<br>
+    digitalWrite(r, LOW);<br>
+    digitalWrite(g, LOW);<br>
+    digitalWrite(b, LOW);<br>
+    lcd.setCursor(0,0);<br>
+    lcd.print("(x+y+z)(x^2+y^2+");<br>
+    lcd.print("                ");<br>
+    lcd.setCursor(0,1);<br>
+    lcd.print("z^2-xy-xz-yz)");<br>
+    lcd.print("             ");   <br>
+  }
+  else if(val == "x³ + y³" or val == "x³+y³" or val == "X³ + Y³" or val == "X³+Y³"){<br>
+    digitalWrite(r, LOW);<br>
+    digitalWrite(g, LOW);<br>
+    digitalWrite(b, LOW);<br>
+    lcd.setCursor(0,0);<br>
+    lcd.print("(x+y)(x^2+y^2");<br>
+    lcd.print("                ");<br>
+    lcd.setCursor(0,1);<br>
+    lcd.print("-xy)");<br>
+    lcd.print("             ");   <br>
+  }<br>
+  else if(val == "x³ + y³ + z³" or val == "x³+y³+z³" or val == "X³ + Y³ + Z³" or val == "X³+Y³+Z³"){<br>
+    digitalWrite(r, LOW);<br>
+    digitalWrite(g, LOW);<br>
+    digitalWrite(b, LOW);<br>
+    lcd.setCursor(0,0);<br>
+    lcd.print("= 3xyz");<br>
+    lcd.print("                ");<br>
+    lcd.setCursor(0,1);<br>
+    lcd.print("(If x+y+z = 0)");<br>
+    lcd.print("             ");   <br>
+  }<br>
+  else if(val == "0"){<br>
+    digitalWrite(r, LOW);<br>
+    digitalWrite(b, LOW);<br>
+    digitalWrite(g, LOW);<br>
+    arm.write(0);<br>
+    lcd.setCursor(0,0);
+    lcd.print("Arm at: 0 ");<br>
+    lcd.print("           ");<br>
+    lcd.setCursor(0,1);<br>
+    lcd.print("orginal position");<br>
+  }<br>
+ 
+  
+  // put your main code here, to run repeatedly:<br>
+}<br>
+</font></p>
+<font size="5"><p>
+This is the code for this project. You can just copy and paste this into your software. In case you don't know where  to download the arduino software from, please do checkout <a href="https://www.arduino.cc/en/software">this link</a>
+and ten download the suitable software for your operating system and download it and then open that downloaded file and follow the steps on the wizard and then voila you have downloaded the Software.
+Also you need some libraries cause to operate servo motor and I2C LCD display, he code will be big if we don't have libraries. That is why it s important to add libraries
+I2C LCD Library: On the top bar, you will find sketch. Go to sketch and then click "Include Library". In that there will be again many options to choose from. Click "Add .Zip Library".(Before that you 
+need to click this <a href="http://downloads.arduino.cc/libraries/github.com/marcoschwartz/LiquidCrystal_I2C-1.1.2.zip">link</a> and download it. After downloading
+it, extract the zip.Now come back to the Arduino software and then coninue:-),then find the file over your computer you have downloaded it, click on the file and then click the Ok or add button.
+The library will be open. Now you can copy the code and upload it on the arduino. There, your magical box is now ready.!! :-). Please support me by like,share and subscribe to my channel.
+Thank you.</p></font>   
+</body>
+</html>
